@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>English Dept Research Library</title>
   
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -22,6 +24,7 @@
     }
   </script>
 
+  <!-- Icons & PDF Engine -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -75,22 +78,62 @@
 </head>
 <body class="text-gray-900 dark:text-gray-100 min-h-screen overflow-hidden">
   
-  <div id="welcomeScreen" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/80 backdrop-blur-md transition-all duration-1000 cursor-pointer p-4" onclick="dismissWelcome()">
-    <div class="relative bg-white/10 dark:bg-gray-800/40 border border-white/20 p-8 md:p-12 rounded-3xl text-center shadow-2xl backdrop-blur-xl max-w-lg w-full transform hover:scale-[1.02] transition-transform duration-500 overflow-hidden group">
-      <div class="absolute inset-0 bg-gradient-to-br from-uni-500/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
-      <div class="relative z-10">
-        <i class="fa-solid fa-book-open-reader text-5xl md:text-6xl text-white mb-6 drop-shadow-md"></i>
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">English Department</h1>
-        <h2 class="text-lg md:text-xl font-light text-gray-200 mb-8 uppercase tracking-widest">Research Library</h2>
-        <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-uni-600/90 hover:bg-uni-500 text-white text-sm font-medium transition-colors shadow-lg animate-pulse">
+  <!-- Colorful Welcome Screen -->
+  <div id="welcomeScreen" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/90 backdrop-blur-lg transition-all duration-1000 cursor-pointer p-4 overflow-y-auto" onclick="dismissWelcome()">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-purple-600/30 to-rose-500/30 animate-pulse"></div>
+    <div class="relative bg-white/10 dark:bg-gray-800/60 border border-white/20 p-6 md:p-10 rounded-3xl text-center shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] backdrop-blur-2xl max-w-xl w-full transform hover:scale-[1.02] transition-transform duration-500 overflow-hidden group my-8">
+      <div class="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 via-transparent to-amber-500/20 opacity-70 group-hover:opacity-100 transition-opacity"></div>
+      
+      <div class="relative z-10 flex flex-col items-center">
+        <div class="flex gap-4 mb-4">
+          <i class="fa-solid fa-book text-4xl text-cyan-400 drop-shadow-md"></i>
+          <i class="fa-solid fa-graduation-cap text-5xl text-amber-400 drop-shadow-lg -mt-2"></i>
+          <i class="fa-solid fa-microscope text-4xl text-rose-400 drop-shadow-md"></i>
+        </div>
+        <p class="text-sm font-semibold text-amber-300 uppercase tracking-widest mb-1">University of Raparin</p>
+        <p class="text-xs font-medium text-cyan-200 uppercase tracking-widest mb-4">College of Basic Education</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight drop-shadow-md">English Language Dept.</h1>
+        <h2 class="text-xl font-light text-gray-200 mb-6 tracking-wide">Researches & Books Library</h2>
+
+        <!-- Custom Dedication / Info Box -->
+        <div class="w-full bg-black/20 border border-white/10 rounded-2xl p-5 mb-6 shadow-inner backdrop-blur-md transition-colors hover:bg-black/30">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-center md:text-right" dir="rtl" style="font-family: 'Noto Sans Arabic', Tahoma, sans-serif;">
+            
+            <!-- Supervisor -->
+            <div class="flex flex-col items-center md:items-start">
+              <span class="text-cyan-300 font-bold mb-2 text-[11px] uppercase tracking-wider" dir="ltr">Supervisor</span>
+              <p class="text-white font-bold text-[15px] bg-white/5 px-4 py-2.5 rounded-xl border border-white/10 w-full text-center shadow-sm">لانە ئامانج محمود</p>
+            </div>
+            
+            <!-- Researchers -->
+            <div class="flex flex-col items-center md:items-start">
+              <span class="text-purple-300 font-bold mb-2 text-[11px] uppercase tracking-wider" dir="ltr">Researchers</span>
+              <div class="space-y-2 text-gray-100 text-sm font-medium w-full">
+                <p class="bg-white/5 px-4 py-1.5 rounded-lg border border-white/10 w-full text-center hover:bg-white/10 transition shadow-sm">هەوار خالید عبدالرحمان</p>
+                <p class="bg-white/5 px-4 py-1.5 rounded-lg border border-white/10 w-full text-center hover:bg-white/10 transition shadow-sm">لەنیا عومەر ئیسماعیل</p>
+                <p class="bg-white/5 px-4 py-1.5 rounded-lg border border-white/10 w-full text-center hover:bg-white/10 transition shadow-sm">گلێنە یونس عبدصمد</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Published Year -->
+          <div class="mt-5 pt-4 border-t border-white/10 text-center flex flex-col items-center">
+            <span class="text-amber-300 font-bold mb-1 text-[11px] uppercase tracking-wider block" dir="ltr">Published Year</span>
+            <span class="font-bold text-lg text-amber-100 bg-amber-500/20 px-6 py-1.5 rounded-xl border border-amber-500/30 inline-block shadow-sm">2025-2026</span>
+          </div>
+        </div>
+
+        <div class="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-sm font-bold transition-all shadow-lg shadow-purple-500/30 animate-pulse">
           <span>Tap to Enter</span> <i class="fa-solid fa-arrow-right"></i>
         </div>
+        <p class="mt-6 text-[10px] text-gray-400/80 font-medium tracking-wider">CREATED BY ENGLISH LANGUAGE DEPARTMENT © 2026</p>
       </div>
     </div>
   </div>
 
   <div class="bg-library"></div>
 
+  <!-- Sticky Header -->
   <header class="sticky top-0 z-40 glass shadow-sm transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
@@ -114,6 +157,7 @@
     </div>
   </header>
 
+  <!-- Floating Background Music Player -->
   <div class="fixed bottom-6 left-6 z-50 glass rounded-2xl p-3 shadow-lg border border-gray-200/50 dark:border-gray-700/50 flex items-center gap-3 transition-all max-w-xs duration-300">
     <button onclick="toggleBackgroundMusic()" id="musicPlayBtn" class="w-10 h-10 rounded-full bg-uni-600 text-white flex items-center justify-center shadow-md hover:bg-uni-700 transition active:scale-95">
       <i class="fa-solid fa-play ml-0.5" id="musicBtnIcon"></i>
@@ -135,15 +179,19 @@
     </audio>
   </div>
 
+  <!-- Main Interface -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" id="mainApp">
     
+    <!-- Controls Section -->
     <div class="glass rounded-2xl p-4 sm:p-6 mb-8 shadow-sm">
       <div class="flex flex-col lg:flex-row gap-4 mb-4">
+        <!-- Search -->
         <div class="flex-1 relative">
           <i class="fa-solid fa-search absolute left-4 top-3.5 text-gray-400"></i>
           <input type="text" id="searchInput" placeholder="Search titles, authors, or abstracts..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 focus:ring-2 focus:ring-uni-600 outline-none transition">
         </div>
         
+        <!-- Category Segmented Control -->
         <div class="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0" id="categoryFilter">
           <button class="cat-btn active px-4 py-2 rounded-lg text-sm font-medium bg-white dark:bg-gray-700 shadow-sm transition" data-cat="All">All</button>
           <button class="cat-btn px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white transition" data-cat="Literature">Literature</button>
@@ -151,6 +199,7 @@
         </div>
       </div>
 
+      <!-- Dropdown Filters -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <select id="yearFilter" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 outline-none"><option value="All">All Years</option></select>
         <select id="supervisorFilter" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 outline-none"><option value="All">All Supervisors</option></select>
@@ -165,6 +214,7 @@
       </div>
     </div>
 
+    <!-- Active Favourites Toolbar -->
     <div id="favToolbar" class="hidden glass rounded-xl p-4 mb-6 flex justify-between items-center border-l-4 border-red-500 fade-in">
       <div>
         <h3 class="font-bold">Viewing Favourites</h3>
@@ -175,9 +225,12 @@
       </button>
     </div>
 
+    <!-- Results Grid -->
     <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      </div>
+      <!-- Injected dynamically via script -->
+    </div>
 
+    <!-- Empty State -->
     <div id="emptyState" class="hidden py-20 text-center fade-in">
       <i class="fa-solid fa-folder-open text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
       <h3 class="text-xl font-bold text-gray-700 dark:text-gray-300">No papers found</h3>
@@ -186,6 +239,9 @@
     </div>
   </main>
 
+  <!-- ================= MODALS ================= -->
+  
+  <!-- Paper Details Modal -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl fade-in max-h-[90vh] flex flex-col">
       <div class="p-6 overflow-y-auto flex-1" id="detailContent"></div>
@@ -195,6 +251,7 @@
     </div>
   </div>
 
+  <!-- Email Request Modal -->
   <div id="requestModal" class="fixed inset-0 z-[60] hidden bg-gray-900/60 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass w-full max-w-md rounded-2xl p-6 shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
       <h3 class="text-lg font-bold mb-1">Request Full PDF</h3>
@@ -222,6 +279,7 @@
     </div>
   </div>
 
+  <!-- Admin Login Modal -->
   <div id="loginModal" class="fixed inset-0 z-50 hidden bg-gray-900/60 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass w-full max-w-sm rounded-2xl p-6 shadow-2xl fade-in text-center">
       <i class="fa-solid fa-lock text-4xl text-gray-400 mb-4"></i>
@@ -232,6 +290,7 @@
     </div>
   </div>
 
+  <!-- Admin Dashboard -->
   <div id="adminDashboard" class="hidden max-w-5xl mx-auto px-4 py-8 fade-in">
     <div class="flex justify-between items-center mb-8 glass p-4 rounded-2xl">
       <div>
@@ -242,6 +301,7 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Settings & Form Panel -->
       <div class="glass rounded-2xl p-6 h-fit">
         <h3 class="font-bold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Global Settings</h3>
         <div class="flex items-center justify-between mb-6">
@@ -274,6 +334,7 @@
         </div>
       </div>
 
+      <!-- Requests Panel -->
       <div class="lg:col-span-2 glass rounded-2xl p-6">
         <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
           <h3 class="font-bold">Pending Download Requests</h3>
@@ -282,12 +343,14 @@
           </button>
         </div>
         <div id="requestList" class="space-y-3">
-          </div>
+          <!-- Injected dynamically via JS -->
+        </div>
       </div>
     </div>
   </div>
 
 
+  <!-- ================= SCRIPTS ================= -->
   <script>
     // ================= CONFIGURATION =================
     // IMPORTANT: PASTE YOUR DEPLOYED WEB APP URL HERE
@@ -319,13 +382,6 @@
 
     // Initialization
     document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        if (document.getElementById('welcomeScreen')) dismissWelcome();
-      }, 3000);
-
-      updateFavCount();
-      showToast("Loading library database...", "info");
-      
       // Fetch initial data from GAS API
       fetch(`${API_URL}?action=getAppData`)
         .then(res => res.json())
@@ -333,7 +389,9 @@
           if(data.error) throw new Error(data.error);
           initApp(data);
         })
-        .catch(err => showToast("Error loading data: " + err.message, "error"));
+        .catch(err => {
+          console.error("Fetch Error:", err);
+        });
       
       let timeout;
       document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -396,6 +454,7 @@
       supSel.innerHTML = '<option value="All">All Supervisors</option>';
       sups.forEach(s => supSel.innerHTML += `<option value="${s}">${s}</option>`);
 
+      updateFavCount();
       applyFilters();
     }
 
@@ -473,13 +532,19 @@
                  </div>
                  
                  <div class="flex items-start gap-3">
-                    <div class="mt-0.5 w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 shadow-sm border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400">
+                    <div class="mt-0.5 w-7 h-7 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center shrink-0 shadow-sm border border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400">
                       <i class="fa-solid fa-users text-xs"></i>
                     </div>
                     <div class="w-full">
-                      <p class="text-[10px] font-bold tracking-wider text-emerald-500 dark:text-emerald-400 uppercase mb-1">Researchers</p>
-                      <ul class="text-[14px] leading-relaxed font-medium text-gray-700 dark:text-gray-200 list-none pl-0 space-y-1" style="font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;" dir="auto">
-                         ${studentList.map((s, i) => `<li class="flex items-start gap-2"><span class="text-emerald-500/70 text-[10px] mt-1.5"><i class="fa-solid fa-circle"></i></span> ${s}</li>`).join('')}
+                      <p class="text-[10px] font-bold tracking-wider text-purple-500 dark:text-purple-400 uppercase mb-1">Researchers</p>
+                      <ul class="text-[14px] leading-relaxed font-medium text-gray-700 dark:text-gray-200 list-none pl-0 space-y-1.5" style="font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;" dir="auto">
+                         ${studentList.map((s, i) => {
+                            const colors = ['text-rose-500', 'text-amber-500', 'text-emerald-500', 'text-cyan-500', 'text-indigo-500'];
+                            const bgColors = ['bg-rose-100 dark:bg-rose-900/30', 'bg-amber-100 dark:bg-amber-900/30', 'bg-emerald-100 dark:bg-emerald-900/30', 'bg-cyan-100 dark:bg-cyan-900/30', 'bg-indigo-100 dark:bg-indigo-900/30'];
+                            const color = colors[i % colors.length];
+                            const bg = bgColors[i % bgColors.length];
+                            return `<li class="flex items-center gap-2.5"><span class="${bg} ${color} w-5 h-5 rounded-full flex items-center justify-center shadow-sm text-[8px] shrink-0"><i class="fa-solid fa-user"></i></span> <span>${s}</span></li>`;
+                         }).join('')}
                       </ul>
                     </div>
                  </div>
@@ -548,13 +613,19 @@
              </div>
              
              <div class="flex items-start gap-4">
-                <div class="mt-1 w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 shadow border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400">
+                <div class="mt-1 w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center shrink-0 shadow border border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400">
                   <i class="fa-solid fa-users text-lg"></i>
                 </div>
                 <div class="w-full">
-                  <p class="text-xs font-bold tracking-wider text-emerald-500 dark:text-emerald-400 uppercase mb-2">Researchers</p>
-                  <ul class="font-semibold text-gray-800 dark:text-gray-200 text-[16px] list-none p-0 m-0 space-y-2" style="font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;" dir="auto">
-                     ${studentList.map((s, i) => `<li class="flex items-center gap-2"><span class="text-emerald-500/70 text-xs"><i class="fa-solid fa-circle"></i></span> ${s}</li>`).join('')}
+                  <p class="text-xs font-bold tracking-wider text-purple-500 dark:text-purple-400 uppercase mb-2">Researchers</p>
+                  <ul class="font-semibold text-gray-800 dark:text-gray-200 text-[16px] list-none p-0 m-0 space-y-2.5" style="font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;" dir="auto">
+                     ${studentList.map((s, i) => {
+                        const colors = ['text-rose-500', 'text-amber-500', 'text-emerald-500', 'text-cyan-500', 'text-indigo-500'];
+                        const bgColors = ['bg-rose-100 dark:bg-rose-900/40', 'bg-amber-100 dark:bg-amber-900/40', 'bg-emerald-100 dark:bg-emerald-900/40', 'bg-cyan-100 dark:bg-cyan-900/40', 'bg-indigo-100 dark:bg-indigo-900/40'];
+                        const color = colors[i % colors.length];
+                        const bg = bgColors[i % bgColors.length];
+                        return `<li class="flex items-center gap-3"><span class="${bg} ${color} w-7 h-7 rounded-full flex items-center justify-center shadow-sm text-[10px] shrink-0 border border-white/50 dark:border-gray-700"><i class="fa-solid fa-user"></i></span> <span>${s}</span></li>`;
+                     }).join('')}
                   </ul>
                 </div>
              </div>
