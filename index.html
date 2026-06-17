@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>English Dept Research Library</title>
   
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -24,7 +22,6 @@
     }
   </script>
 
-  <!-- Icons & PDF Engine -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -78,7 +75,6 @@
 </head>
 <body class="text-gray-900 dark:text-gray-100 min-h-screen overflow-hidden">
   
-  <!-- Colorful Welcome Screen -->
   <div id="welcomeScreen" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/90 backdrop-blur-lg transition-all duration-1000 cursor-pointer p-4 overflow-y-auto" onclick="dismissWelcome()">
     <div class="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-purple-600/30 to-rose-500/30 animate-pulse"></div>
     <div class="relative bg-white/10 dark:bg-gray-800/60 border border-white/20 p-6 md:p-10 rounded-3xl text-center shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] backdrop-blur-2xl max-w-xl w-full transform hover:scale-[1.02] transition-transform duration-500 overflow-hidden group my-8">
@@ -95,17 +91,14 @@
         <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight drop-shadow-md">English Language Dept.</h1>
         <h2 class="text-xl font-light text-gray-200 mb-6 tracking-wide">Researches & Books Library</h2>
 
-        <!-- Custom Dedication / Info Box -->
         <div class="w-full bg-black/20 border border-white/10 rounded-2xl p-5 mb-6 shadow-inner backdrop-blur-md transition-colors hover:bg-black/30">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-center md:text-right" dir="rtl" style="font-family: 'Noto Sans Arabic', Tahoma, sans-serif;">
             
-            <!-- Supervisor -->
             <div class="flex flex-col items-center md:items-start">
               <span class="text-cyan-300 font-bold mb-2 text-[11px] uppercase tracking-wider" dir="ltr">Supervisor</span>
               <p class="text-white font-bold text-[15px] bg-white/5 px-4 py-2.5 rounded-xl border border-white/10 w-full text-center shadow-sm">لانە ئامانج محمود</p>
             </div>
             
-            <!-- Researchers -->
             <div class="flex flex-col items-center md:items-start">
               <span class="text-purple-300 font-bold mb-2 text-[11px] uppercase tracking-wider" dir="ltr">Researchers</span>
               <div class="space-y-2 text-gray-100 text-sm font-medium w-full">
@@ -116,7 +109,6 @@
             </div>
           </div>
 
-          <!-- Published Year -->
           <div class="mt-5 pt-4 border-t border-white/10 text-center flex flex-col items-center">
             <span class="text-amber-300 font-bold mb-1 text-[11px] uppercase tracking-wider block" dir="ltr">Published Year</span>
             <span class="font-bold text-lg text-amber-100 bg-amber-500/20 px-6 py-1.5 rounded-xl border border-amber-500/30 inline-block shadow-sm">2025-2026</span>
@@ -133,7 +125,6 @@
 
   <div class="bg-library"></div>
 
-  <!-- Sticky Header -->
   <header class="sticky top-0 z-40 glass shadow-sm transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
@@ -157,7 +148,6 @@
     </div>
   </header>
 
-  <!-- Floating Background Music Player -->
   <div class="fixed bottom-6 left-6 z-50 glass rounded-2xl p-3 shadow-lg border border-gray-200/50 dark:border-gray-700/50 flex items-center gap-3 transition-all max-w-xs duration-300">
     <button onclick="toggleBackgroundMusic()" id="musicPlayBtn" class="w-10 h-10 rounded-full bg-uni-600 text-white flex items-center justify-center shadow-md hover:bg-uni-700 transition active:scale-95">
       <i class="fa-solid fa-play ml-0.5" id="musicBtnIcon"></i>
@@ -179,19 +169,15 @@
     </audio>
   </div>
 
-  <!-- Main Interface -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" id="mainApp">
     
-    <!-- Controls Section -->
     <div class="glass rounded-2xl p-4 sm:p-6 mb-8 shadow-sm">
       <div class="flex flex-col lg:flex-row gap-4 mb-4">
-        <!-- Search -->
         <div class="flex-1 relative">
           <i class="fa-solid fa-search absolute left-4 top-3.5 text-gray-400"></i>
           <input type="text" id="searchInput" placeholder="Search titles, authors, or abstracts..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 focus:ring-2 focus:ring-uni-600 outline-none transition">
         </div>
         
-        <!-- Category Segmented Control -->
         <div class="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0" id="categoryFilter">
           <button class="cat-btn active px-4 py-2 rounded-lg text-sm font-medium bg-white dark:bg-gray-700 shadow-sm transition" data-cat="All">All</button>
           <button class="cat-btn px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white transition" data-cat="Literature">Literature</button>
@@ -199,7 +185,6 @@
         </div>
       </div>
 
-      <!-- Dropdown Filters -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <select id="yearFilter" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 outline-none"><option value="All">All Years</option></select>
         <select id="supervisorFilter" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 outline-none"><option value="All">All Supervisors</option></select>
@@ -214,7 +199,6 @@
       </div>
     </div>
 
-    <!-- Active Favourites Toolbar -->
     <div id="favToolbar" class="hidden glass rounded-xl p-4 mb-6 flex justify-between items-center border-l-4 border-red-500 fade-in">
       <div>
         <h3 class="font-bold">Viewing Favourites</h3>
@@ -225,12 +209,9 @@
       </button>
     </div>
 
-    <!-- Results Grid -->
     <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Injected dynamically via script -->
-    </div>
+      </div>
 
-    <!-- Empty State -->
     <div id="emptyState" class="hidden py-20 text-center fade-in">
       <i class="fa-solid fa-folder-open text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
       <h3 class="text-xl font-bold text-gray-700 dark:text-gray-300">No papers found</h3>
@@ -239,9 +220,6 @@
     </div>
   </main>
 
-  <!-- ================= MODALS ================= -->
-  
-  <!-- Paper Details Modal -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl fade-in max-h-[90vh] flex flex-col">
       <div class="p-6 overflow-y-auto flex-1" id="detailContent"></div>
@@ -251,7 +229,6 @@
     </div>
   </div>
 
-  <!-- Email Request Modal -->
   <div id="requestModal" class="fixed inset-0 z-[60] hidden bg-gray-900/60 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass w-full max-w-md rounded-2xl p-6 shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
       <h3 class="text-lg font-bold mb-1">Request Full PDF</h3>
@@ -279,7 +256,6 @@
     </div>
   </div>
 
-  <!-- Admin Login Modal -->
   <div id="loginModal" class="fixed inset-0 z-50 hidden bg-gray-900/60 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass w-full max-w-sm rounded-2xl p-6 shadow-2xl fade-in text-center">
       <i class="fa-solid fa-lock text-4xl text-gray-400 mb-4"></i>
@@ -290,7 +266,6 @@
     </div>
   </div>
 
-  <!-- Admin Dashboard -->
   <div id="adminDashboard" class="hidden max-w-5xl mx-auto px-4 py-8 fade-in">
     <div class="flex justify-between items-center mb-8 glass p-4 rounded-2xl">
       <div>
@@ -301,7 +276,6 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Settings & Form Panel -->
       <div class="glass rounded-2xl p-6 h-fit">
         <h3 class="font-bold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Global Settings</h3>
         <div class="flex items-center justify-between mb-6">
@@ -334,7 +308,6 @@
         </div>
       </div>
 
-      <!-- Requests Panel -->
       <div class="lg:col-span-2 glass rounded-2xl p-6">
         <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
           <h3 class="font-bold">Pending Download Requests</h3>
@@ -343,14 +316,11 @@
           </button>
         </div>
         <div id="requestList" class="space-y-3">
-          <!-- Injected dynamically via JS -->
-        </div>
+          </div>
       </div>
     </div>
   </div>
 
-
-  <!-- ================= SCRIPTS ================= -->
   <script>
     // ================= CONFIGURATION =================
     // IMPORTANT: PASTE YOUR DEPLOYED WEB APP URL HERE
@@ -825,155 +795,4 @@
           <div class="flex-1 w-full text-left">
             <p class="font-bold text-sm text-gray-900 dark:text-white mb-2 leading-tight">${r.title}</p>
             <div class="text-xs text-gray-600 dark:text-gray-400 mb-2 grid grid-cols-1 md:grid-cols-2 gap-1">
-               <p><span class="font-semibold text-gray-800 dark:text-gray-200">${r.fullName}</span> (${r.stage})</p>
-               <p><i class="fa-solid fa-envelope mr-1"></i> ${r.email}</p>
-               <p><i class="fa-regular fa-calendar mr-1"></i> ${new Date(r.date).toLocaleDateString()}</p>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded-lg border border-gray-100 dark:border-gray-700">
-               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Reason</p>
-               <p class="text-sm text-gray-700 dark:text-gray-300 italic">"${r.reason}"</p>
-            </div>
-          </div>
-          <div class="flex flex-row md:flex-col gap-2 w-full md:w-32 shrink-0">
-            <button onclick="processReq(${r.row}, 'accept')" class="w-full px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-bold shadow-sm transition"><i class="fa-solid fa-check mr-1"></i> Accept</button>
-            <button onclick="processReq(${r.row}, 'reject')" class="w-full px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 rounded-lg text-sm font-bold transition"><i class="fa-solid fa-xmark mr-1"></i> Reject</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function refreshRequests() {
-      const btn = document.getElementById('refreshReqsBtn');
-      const icon = document.getElementById('refreshIcon');
-      if (icon) icon.classList.add('fa-spin');
-      if (btn) btn.disabled = true;
-      
-      fetch(`${API_URL}?action=getAdminData&password=${encodeURIComponent(ADMIN_PWD)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.error) throw new Error(data.error);
-          renderAdminData(data);
-          showToast("Requests updated", "success");
-        })
-        .catch(err => showToast("Error refreshing data", "error"))
-        .finally(() => {
-          if (icon) icon.classList.remove('fa-spin');
-          if (btn) btn.disabled = false;
-        });
-    }
-
-    function processReq(row, action) {
-      const req = PENDING_REQUESTS.find(r => r.row === row);
-      if (!req) return showToast("Request mapping error.", "error");
-
-      showToast("Processing request...", "info");
-      
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'handleRequest',
-          rowId: req.row,
-          email: req.email,
-          fileId: req.fileId,
-          title: req.title,
-          actionType: action,
-          password: ADMIN_PWD
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.error || (data.status && data.status.startsWith('Error'))) {
-          showToast(data.error || data.status, "error");
-        } else {
-          showToast(`Request ${action}ed!`, "success");
-          refreshRequests();
-        }
-      })
-      .catch(err => showToast("Error processing request.", "error"));
-    }
-
-    function toggleGlobalPdf() {
-      const isChecked = document.getElementById('pdfToggle').checked;
-      PDF_ENABLED = isChecked;
-      
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'togglePdfSetting',
-          status: isChecked,
-          password: ADMIN_PWD
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (!data.error) showToast("Settings updated", "success");
-      })
-      .catch(err => showToast("Failed to update setting", "error"));
-    }
-
-    function addResearch() {
-      const data = {
-        year: document.getElementById('newYear').value,
-        category: document.getElementById('newCat').value,
-        supervisor: document.getElementById('newSup').value,
-        student1: document.getElementById('newS1').value,
-        student2: document.getElementById('newS2').value,
-        student3: document.getElementById('newS3').value,
-        topic: document.getElementById('newTopic').value,
-        abstract: document.getElementById('newAbstract').value,
-        fileId: document.getElementById('newFile').value
-      };
-      
-      if(!data.topic || !data.year) return showToast("Topic and Year are required!", "error");
-      
-      const btn = document.getElementById('addResearchBtn');
-      if (btn) { btn.innerText = "Adding..."; btn.disabled = true; }
-
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'addNewResearch',
-          researchData: data,
-          password: ADMIN_PWD
-        })
-      })
-      .then(res => res.json())
-      .then(resData => {
-        if (resData.error) throw new Error(resData.error);
-        showToast("Added successfully!", "success");
-        ['newYear','newSup','newS1','newS2','newS3','newTopic','newAbstract','newFile'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.value = '';
-        });
-      })
-      .catch(err => showToast("Error adding record: " + err.message, "error"))
-      .finally(() => {
-        if (btn) { btn.innerText = "Add Record"; btn.disabled = false; }
-      });
-    }
-
-    function logoutAdmin() {
-      ADMIN_PWD = '';
-      document.getElementById('adminDashboard').classList.add('hidden');
-      document.getElementById('mainApp').classList.remove('hidden');
-      
-      fetch(`${API_URL}?action=getAppData`)
-        .then(res => res.json())
-        .then(data => { if(!data.error) initApp(data); });
-    }
-
-    // ================= UTILS =================
-    function showToast(msg, type="info") {
-      const colors = { info: "bg-gray-800 text-white", success: "bg-green-600 text-white", error: "bg-red-600 text-white" };
-      const toast = document.createElement('div');
-      toast.className = `toast px-4 py-3 rounded-xl shadow-xl font-medium text-sm fade-in ${colors[type]}`;
-      toast.innerText = msg;
-      document.body.appendChild(toast);
-      setTimeout(() => { toast.style.opacity = 0; setTimeout(() => toast.remove(), 300); }, 3000);
-    }
-  </script>
-</body>
-</html>
+               <p><span class="font-semibold text-gray-80
