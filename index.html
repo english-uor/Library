@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Dept Library</title>
+  
+  <link rel="icon" type="image/png" href="Icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="Icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="English Library">
+  <meta name="msapplication-TileColor" content="#1e3a8a">
+  <meta name="msapplication-TileImage" content="Icon.png">  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'media',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { uni: { 50: '#eff6ff', 600: '#2563eb', 900: '#1e3a8a' } }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .bg-library {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+      background-size: cover; background-position: center;
+      filter: blur(12px) brightness(0.7); z-index: -1;
+    }
+    @media (prefers-color-scheme: dark) {
+      .bg-library { filter: blur(12px) brightness(0.3); }
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    @media (prefers-color-scheme: dark) {
+      .glass {
+        background: rgba(30, 41, 59, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+    
+    .fade-in { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .toast { position: fixed; bottom: 20px; right: 20px; z-index: 100; transition: all 0.3s ease; }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .whitespace-pre-wrap { white-space: pre-wrap; }
+
+    /* Sound Visualizer Animation */
+    @keyframes barWave {
+      0%, 100% { height: 4px; }
+      50% { height: 18px; }
+    }
+    .visualizer-bar {
+      width: 3px;
+      background-color: #2563eb;
+      animation: barWave 1s ease-in-out infinite;
+      border-radius: 1px;
+    }
+    .visualizer-bar:nth-child(2) { animation-delay: 0.15s; }
+    .visualizer-bar:nth-child(3) { animation-delay: 0.3s; }
+    .visualizer-bar:nth-child(4) { animation-delay: 0.45s; }
+  </style>
+</head>
+<body class="text-gray-900 dark:text-gray-100 min-h-screen overflow-hidden">
+  
+  <div id="welcomeScreen" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/90 backdrop-blur-lg transition-all duration-1000 cursor-pointer p-4" onclick="dismissWelcome()">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-purple-600/30 to-rose-500/30 animate-pulse"></div>
+    <div class="relative bg-white/10 dark:bg-gray-800/60 border border-white/20 p-8 md:p-12 rounded-3xl text-center shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] backdrop-blur-2xl max-w-xl w-full transform hover:scale-[1.02] transition-transform duration-500 overflow-hidden group">
+      <div class="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 via-transparent to-amber-500/20 opacity-70 group-hover:opacity-100 transition-opacity"></div>
+      <div class="relative z-10 flex flex-col items-center">
+        <div class="flex gap-4 mb-6">
+          <i class="fa-solid fa-book text-4xl text-cyan-400 drop-shadow-md"></i>
+          <i class="fa-solid fa-graduation-cap text-5xl text-amber-400 drop-shadow-lg -mt-2"></i>
+          <i class="fa-solid fa-microscope text-4xl text-rose-400 drop-shadow-md"></i>
+        </div>
+        <p class="text-sm md:text-base font-semibold text-amber-300 uppercase tracking-widest mb-1">University of Raparin</p>
+        <p class="text-xs md:text-sm font-medium text-cyan-200 uppercase tracking-widest mb-4">College of Basic Education</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight drop-shadow-md">English Language Dept.</h1>
+        <h2 class="text-xl md:text-2xl font-light text-gray-200 mb-8 tracking-wide">Researches & Books Library</h2>
+        <div class="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-sm font-bold transition-all shadow-lg shadow-purple-500/30 animate-pulse-once">
+          <span>Tap to Enter</span> <i class="fa-solid fa-arrow-right"></i>
+        </div>
+        <p class="mt-8 text-[11px] text-gray-400/80 font-medium tracking-wider">CREATED BY ENGLISH LANGUAGE DEPARTMENT © 2026</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-library"></div>
+
+  <header class="sticky top-0 z-40 glass shadow-sm transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-3 sm:gap-6">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-book-open-reader text-uni-600 dark:text-uni-50 text-2xl"></i>
+            <div class="hidden sm:block">
+              <h1 class="font-bold text-lg leading-tight">English Dept Library</h1>
+              <p class="text-xs text-gray-500 dark:text-gray-400" id="liveStats">Loading database...</p>
+            </div>
+          </div>
+
+          <!-- Section Switcher Buttons -->
+          <div class="flex bg-gray-200/80 dark:bg-gray-800/80 p-1 rounded-xl">
+            <button id="navResearchesBtn" onclick="switchSection('researches')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-white dark:bg-gray-700 text-uni-600 dark:text-white shadow-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-microscope text-xs"></i> <span>Researches</span>
+            </button>
+            <button id="navBooksBtn" onclick="switchSection('books')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-book text-xs"></i> <span>Books</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-4">
+          <button onclick="toggleFavView()" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 transition">
+            <i class="fa-solid fa-heart"></i>
+            <span class="text-sm font-medium hidden sm:inline">Favs (<span id="favCount">0</span>)</span>
+          </button>
+          <button onclick="openAdminLogin()" class="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition" title="Admin Panel">
+            <i class="fa-solid fa-user-shield"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="fixed bottom-6 left-6 z-50 glass rounded-2xl p-3 shadow-lg border border-gray-200/50 dark:border-gray-700/50 flex items-center gap-3 transition-all max-w-xs duration-300">
+    <button onclick="toggleBackgroundMusic()" id="musicPlayBtn" class="w-10 h-10 rounded-full bg-uni-600 text-white flex items-center justify-center shadow-md hover:bg-uni-700 transition active:scale-95">
+      <i class="fa-solid fa-play ml-0.5" id="musicBtnIcon"></i>
+    </button>
+    <div>
+      <p class="text-xs font-bold text-gray-900 dark:text-white">Library Ambient</p>
+      <div class="flex items-center gap-1.5 mt-0.5">
+        <div class="flex items-end gap-0.5 h-4 w-5 mr-1" id="audioVisualizer" style="display: none;">
+          <div class="visualizer-bar"></div>
+          <div class="visualizer-bar"></div>
+          <div class="visualizer-bar"></div>
+          <div class="visualizer-bar"></div>
+        </div>
+        <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium" id="musicStatus">Background Music</span>
+      </div>
+    </div>
+    <audio id="bgAudio" loop>
+      <source src="https://www.dropbox.com/scl/fi/6f6d9rpfxoztuw9khrp1t/5-Minute-Timer-Relaxing-Music-with-Ocean-Waves.mp3?rlkey=v7lejh79kj1hvrp3b43d1vafs&st=im62zjvj&raw=1" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" id="mainApp">
+    
+    <div class="rounded-2xl p-4 sm:p-6 mb-8 shadow-sm" style="background: rgba(147, 197, 114, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(147, 197, 114, 0.4);">
+      <div class="flex flex-col lg:flex-row gap-4 mb-4">
+        <div class="flex-1 relative">
+          <i class="fa-solid fa-search absolute left-4 top-3.5 text-gray-400"></i>
+          <input type="text" id="searchInput" placeholder="Search titles, authors, or abstracts..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 focus:ring-2 focus:ring-uni-600 outline-none transition">
+        </div>
+        
+        <div class="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0 overflow-x-auto" id="categoryFilter">
+          <button class="cat-btn active px-4 py-2 rounded-lg text-sm font-medium bg-white dark:bg-gray-700 shadow-sm transition" data-cat="All">All</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <select id="yearFilter" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 outline-none"><option value="All">All Years</option></select>
+        <select id="personFilter" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 outline-none"><option value="All">All Supervisors</option></select>
+        <div class="flex gap-2">
+          <button onclick="toggleSort()" class="flex-1 p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700 transition flex justify-between items-center">
+            <span id="sortLabel">Newest First</span> <i class="fa-solid fa-sort"></i>
+          </button>
+          <button onclick="resetFilters()" class="px-4 p-3 rounded-xl bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 transition text-gray-700 dark:text-gray-200" title="Clear Filters">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="favToolbar" class="hidden glass rounded-xl p-4 mb-6 flex justify-between items-center border-l-4 border-red-500 fade-in">
+      <div>
+        <h3 class="font-bold">Viewing Favourites</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">You are only seeing your saved items.</p>
+      </div>
+      <button onclick="downloadFavouritesPDF()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow transition text-sm flex items-center gap-2">
+        <i class="fa-solid fa-file-pdf"></i> Export PDF
+      </button>
+    </div>
+
+    <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <div id="emptyState" class="hidden py-20 text-center fade-in">
+      <i class="fa-solid fa-folder-open text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+      <h3 class="text-xl font-bold text-gray-700 dark:text-gray-300">No items found</h3>
+      <p class="text-gray-500 mt-2">Try adjusting your filters or search terms.</p>
+      <button onclick="resetFilters()" class="mt-4 px-6 py-2 bg-uni-600 text-white rounded-lg hover:bg-uni-700 transition">Clear Filters</button>
+    </div>
+  </main>
+
+  <div id="detailModal" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl fade-in max-h-[90vh] flex flex-col">
+      <div class="p-6 overflow-y-auto flex-1" id="detailContent"></div>
+      <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex gap-3 justify-end bg-gray-50/50 dark:bg-gray-800/50">
+        <button onclick="closeModal('detailModal')" class="px-5 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition font-medium">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="requestModal" class="fixed inset-0 z-[60] hidden bg-gray-900/60 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass w-full max-w-md rounded-2xl p-6 shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
+      <h3 class="text-lg font-bold mb-1">Request Full PDF</h3>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Fill out the details below. Admin approval is required.</p>
+      
+      <div class="space-y-3 mb-5">
+        <input type="text" id="reqFullName" placeholder="Your Full Name" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-uni-600">
+        <input type="email" id="requestEmail" placeholder="Email Address" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-uni-600">
+        <select id="reqStage" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-uni-600">
+          <option value="" disabled selected>Select Your Stage</option>
+          <option value="1st Stage">1st Stage</option>
+          <option value="2nd Stage">2nd Stage</option>
+          <option value="3rd Stage">3rd Stage</option>
+          <option value="4th Stage">4th Stage</option>
+          <option value="Master/Alumni">Master Student / Alumni</option>
+          <option value="Teacher/Staff">Teacher / Staff</option>
+        </select>
+        <textarea id="reqReason" placeholder="Why do you need this document?" rows="2" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-uni-600"></textarea>
+      </div>
+
+      <div class="flex gap-3 justify-end border-t border-gray-200 dark:border-gray-700 pt-4">
+        <button onclick="closeModal('requestModal')" class="px-4 py-2 text-sm rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Cancel</button>
+        <button onclick="sendDownloadRequest(event)" class="px-4 py-2 text-sm rounded-lg bg-uni-600 text-white hover:bg-uni-700 transition shadow-md">Submit Request</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loginModal" class="fixed inset-0 z-50 hidden bg-gray-900/60 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass w-full max-w-sm rounded-2xl p-6 shadow-2xl fade-in text-center">
+      <i class="fa-solid fa-lock text-4xl text-gray-400 mb-4"></i>
+      <h3 class="text-xl font-bold mb-4">Admin Access</h3>
+      <input type="password" id="adminPwd" placeholder="Enter Admin Password" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 mb-4 text-center outline-none focus:ring-2 focus:ring-gray-800">
+      <button id="loginBtn" onclick="doAdminLogin()" class="w-full py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold hover:bg-gray-800 transition">Login</button>
+      <button onclick="closeModal('loginModal')" class="mt-3 text-sm text-gray-500">Cancel</button>
+    </div>
+  </div>
+
+  <div id="adminDashboard" class="hidden max-w-5xl mx-auto px-4 py-8 fade-in">
+    <div class="flex justify-between items-center mb-8 glass p-4 rounded-2xl">
+      <div>
+        <h2 class="text-2xl font-bold">Admin Dashboard</h2>
+        <p class="text-sm text-gray-500" id="adminStats">Loading stats...</p>
+      </div>
+      <button onclick="logoutAdmin()" class="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition font-medium"><i class="fa-solid fa-sign-out-alt"></i> Logout</button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="glass rounded-2xl p-6 h-fit">
+        <h3 class="font-bold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Global Settings</h3>
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-sm font-medium">Public PDF Viewing</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="pdfToggle" class="sr-only peer" onchange="toggleGlobalPdf()">
+            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+          </label>
+        </div>
+        
+        <h3 class="font-bold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Add New Record</h3>
+        <div class="space-y-3 text-sm">
+          <select id="newItemType" onchange="toggleAdminFormType()" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none font-bold">
+            <option value="research">Add to Researches</option>
+            <option value="book">Add to Books</option>
+          </select>
+
+          <div class="grid grid-cols-2 gap-3">
+            <input type="text" id="newYear" placeholder="Year (e.g. 2026)" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none">
+            <input type="text" id="newCat" placeholder="Category" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none">
+          </div>
+
+          <div id="researchFields">
+            <input type="text" id="newSup" placeholder="Supervisor Name" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none mb-3">
+            <div class="grid grid-cols-3 gap-2">
+              <input type="text" id="newS1" placeholder="Student 1" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none">
+              <input type="text" id="newS2" placeholder="Student 2" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none">
+              <input type="text" id="newS3" placeholder="Student 3" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none">
+            </div>
+          </div>
+
+          <div id="bookFields" class="hidden">
+            <input type="text" id="newAuthors" placeholder="Author(s) Name" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none">
+          </div>
+
+          <input type="text" id="newTopic" placeholder="Title / Topic" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none">
+          <textarea id="newAbstract" placeholder="Abstract / Summary..." rows="3" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none"></textarea>
+          <input type="text" id="newFile" placeholder="Drive File ID" class="w-full p-2 rounded bg-white/50 dark:bg-gray-800/50 border outline-none">
+          <button id="addRecordBtn" onclick="addRecord()" class="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-bold">Add Record</button>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 glass rounded-2xl p-6">
+        <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+          <h3 class="font-bold">Pending Download Requests</h3>
+          <button id="refreshReqsBtn" onclick="refreshRequests()" class="text-sm px-3 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition flex items-center gap-2 text-gray-700 dark:text-gray-200 font-medium">
+            <i class="fa-solid fa-arrows-rotate" id="refreshIcon"></i> Refresh
+          </button>
+        </div>
+        <div id="requestList" class="space-y-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ================= API ENDPOINT CONFIG =================
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwPvDCFN-gY7TMNcX8AgGfdznpjNlkYH4fSnXc2MiSU3QH2w5AAkepZjZi2Pt_uweQKqQ/exec';
+
+    // State Management
+    let ALL_RESEARCHES = [];
+    let ALL_BOOKS = [];
+    let CURRENT_SECTION = 'researches'; // 'researches' or 'books'
+    let FILTERED_ITEMS = [];
+    let FAVOURITES = JSON.parse(localStorage.getItem('englishLibFavs') || '[]');
+    let PENDING_REQUESTS = []; 
+    let PDF_ENABLED = true;
+    let IS_FAV_VIEW = false;
+    let SORT_NEWEST = true;
+    let ADMIN_PWD = '';
+    
+    // Request State
+    let activeRequestFileId = '';
+    let activeRequestTitle = '';
+
+    // Fetch Wrappers
+    async function apiGet(action, params = {}) {
+      try {
+        let url = new URL(WEB_APP_URL);
+        url.searchParams.append('action', action);
+        for (let k in params) url.searchParams.append(k, params[k]);
+        
+        const response = await fetch(url, { redirect: "follow" });
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        return data;
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    async function apiPost(payload) {
+      try {
+        const response = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+          redirect: "follow"
+        });
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        return data;
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    function dismissWelcome() {
+      const welcome = document.getElementById('welcomeScreen');
+      if (!welcome) return;
+      document.body.classList.remove('overflow-hidden');
+      welcome.style.opacity = '0';
+      setTimeout(() => welcome.remove(), 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        if (document.getElementById('welcomeScreen')) dismissWelcome();
+      }, 3000);
+
+      updateFavCount();
+      showToast("Loading library database...", "info");
+      
+      apiGet('getAppData')
+        .then(initApp)
+        .catch(err => showToast("Error loading data: " + err.message, "error"));
+      
+      let timeout;
+      document.getElementById('searchInput').addEventListener('input', () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(applyFilters, 300);
+      });
+
+      document.getElementById('yearFilter').addEventListener('change', applyFilters);
+      document.getElementById('personFilter').addEventListener('change', applyFilters);
+    });
+
+    function toggleBackgroundMusic() {
+      const audio = document.getElementById('bgAudio');
+      const icon = document.getElementById('musicBtnIcon');
+      const statusText = document.getElementById('musicStatus');
+      const visualizer = document.getElementById('audioVisualizer');
+
+      if (audio.paused) {
+        audio.volume = 0.5;
+        audio.play().then(() => {
+          icon.className = "fa-solid fa-pause";
+          statusText.innerText = "Playing Audio";
+          visualizer.style.display = "flex";
+        }).catch(() => {
+          showToast("Click the background screen once, then try playing again.", "error");
+        });
+      } else {
+        audio.pause();
+        icon.className = "fa-solid fa-play ml-0.5";
+        statusText.innerText = "Audio Paused";
+        visualizer.style.display = "none";
+      }
+    }
+
+    function initApp(response) {
+      ALL_RESEARCHES = response.researches || [];
+      ALL_BOOKS = response.books || [];
+      PDF_ENABLED = response.pdfEnabled;
+      
+      setupSectionUI();
+    }
+
+    // Switch between Researches and Books
+    function switchSection(sec) {
+      CURRENT_SECTION = sec;
+      const resBtn = document.getElementById('navResearchesBtn');
+      const bookBtn = document.getElementById('navBooksBtn');
+
+      if (sec === 'researches') {
+        resBtn.className = "px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-white dark:bg-gray-700 text-uni-600 dark:text-white shadow-sm flex items-center gap-1.5";
+        bookBtn.className = "px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1.5";
+      } else {
+        bookBtn.className = "px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-white dark:bg-gray-700 text-uni-600 dark:text-white shadow-sm flex items-center gap-1.5";
+        resBtn.className = "px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1.5";
+      }
+
+      setupSectionUI();
+    }
+
+    function setupSectionUI() {
+      const items = CURRENT_SECTION === 'researches' ? ALL_RESEARCHES : ALL_BOOKS;
+      
+      // Update Category Filter Buttons
+      const categories = ['All', ...new Set(items.map(p => p.category).filter(c => c && c !== 'Uncategorized'))];
+      const catContainer = document.getElementById('categoryFilter');
+      catContainer.innerHTML = categories.map(c => `
+        <button class="cat-btn ${c === 'All' ? 'active bg-white dark:bg-gray-700 shadow-sm font-medium text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'} px-4 py-2 rounded-lg text-sm font-medium transition" data-cat="${c}">${c}</button>
+      `).join('');
+
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          document.querySelectorAll('.cat-btn').forEach(b => {
+            b.classList.remove('bg-white', 'dark:bg-gray-700', 'shadow-sm', 'active', 'text-gray-900', 'dark:text-white');
+            b.classList.add('text-gray-500');
+          });
+          e.target.classList.remove('text-gray-500');
+          e.target.classList.add('bg-white', 'dark:bg-gray-700', 'shadow-sm', 'active', 'text-gray-900', 'dark:text-white');
+          applyFilters();
+        });
+      });
+
+      // Update Years
+      const years = [...new Set(items.map(p => p.year))].filter(y => y !== 'N/A' && y !== '').sort().reverse();
+      const yrSel = document.getElementById('yearFilter');
+      yrSel.innerHTML = '<option value="All">All Years</option>';
+      years.forEach(y => yrSel.innerHTML += `<option value="${y}">${y}</option>`);
+
+      // Update Person Filter (Supervisor or Authors)
+      const personSel = document.getElementById('personFilter');
+      if (CURRENT_SECTION === 'researches') {
+        const sups = [...new Set(items.map(p => p.supervisor))].filter(s => s && s !== 'Unknown').sort();
+        personSel.innerHTML = '<option value="All">All Supervisors</option>';
+        sups.forEach(s => personSel.innerHTML += `<option value="${s}">${s}</option>`);
+      } else {
+        const authors = [...new Set(items.map(p => p.authors))].filter(a => a && a !== 'Unknown Author').sort();
+        personSel.innerHTML = '<option value="All">All Authors</option>';
+        authors.forEach(a => personSel.innerHTML += `<option value="${a}">${a}</option>`);
+      }
+
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const activeItems = CURRENT_SECTION === 'researches' ? ALL_RESEARCHES : ALL_BOOKS;
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const catBtn = document.querySelector('.cat-btn.active');
+      const cat = catBtn ? catBtn.dataset.cat : 'All';
+      const year = document.getElementById('yearFilter').value;
+      const person = document.getElementById('personFilter').value;
+
+      FILTERED_ITEMS = activeItems.filter(p => {
+        if (IS_FAV_VIEW && !FAVOURITES.includes(p.id)) return false;
+        if (cat !== 'All' && p.category !== cat) return false;
+        if (year !== 'All' && String(p.year) !== year) return false;
+        
+        if (CURRENT_SECTION === 'researches') {
+          if (person !== 'All' && p.supervisor !== person) return false;
+          if (search) {
+            const text = `${p.topic} ${p.supervisor} ${p.students} ${p.abstract}`.toLowerCase();
+            if (!text.includes(search)) return false;
+          }
+        } else {
+          if (person !== 'All' && p.authors !== person) return false;
+          if (search) {
+            const text = `${p.topic} ${p.authors} ${p.abstract}`.toLowerCase();
+            if (!text.includes(search)) return false;
+          }
+        }
+        return true;
+      });
+
+      FILTERED_ITEMS.sort((a, b) => {
+        let valA = parseInt(a.year) || 0;
+        let valB = parseInt(b.year) || 0;
+        return SORT_NEWEST ? valB - valA : valA - valB;
+      });
+
+      const totalCount = activeItems.length;
+      const typeLabel = CURRENT_SECTION === 'researches' ? 'papers' : 'books';
+      document.getElementById('liveStats').innerText = `Showing ${FILTERED_ITEMS.length} of ${totalCount} ${typeLabel}`;
+      
+      renderGrid();
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('resultsGrid');
+      const empty = document.getElementById('emptyState');
+      
+      grid.innerHTML = '';
+      if (FILTERED_ITEMS.length === 0) {
+        grid.classList.add('hidden');
+        empty.classList.remove('hidden');
+        return;
+      }
+      
+      grid.classList.remove('hidden');
+      empty.classList.add('hidden');
+
+      let html = '';
+      FILTERED_ITEMS.forEach(p => {
+        const isFav = FAVOURITES.includes(p.id);
+        
+        if (p.type === 'research') {
+          const studentList = (p.students || '').split(',').map(s => s.trim()).filter(s => s !== '');
+          html += `
+            <div class="glass rounded-2xl p-5 flex flex-col hover:-translate-y-1 transition duration-300 shadow-sm fade-in h-full">
+              <div class="flex justify-between items-start mb-3">
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide bg-uni-100 text-uni-900 dark:bg-uni-900/50 dark:text-uni-100 uppercase">${p.category}</span>
+                <button onclick="toggleFav('${p.id}', event)" class="text-xl ${isFav ? 'text-red-500' : 'text-gray-300 dark:text-gray-600 hover:text-red-400'} transition">
+                  <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
+                </button>
+              </div>
+              
+              <h3 class="font-bold text-lg leading-snug mb-2 line-clamp-2 text-gray-900 dark:text-white" dir="auto">${p.topic}</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2 flex-1" dir="auto">${p.abstract || 'No abstract available.'}</p>
+              
+              <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/60 dark:to-gray-900/60 rounded-xl p-4 mb-4 border border-gray-200/60 dark:border-gray-700/60 text-left shadow-inner">
+                <div class="flex flex-col gap-3">
+                   <div class="flex items-start gap-3">
+                      <div class="mt-0.5 w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center shrink-0 shadow-sm text-blue-600 dark:text-blue-400">
+                        <i class="fa-solid fa-chalkboard-user text-xs"></i>
+                      </div>
+                      <div>
+                        <p class="text-[10px] font-bold tracking-wider text-blue-500 dark:text-blue-400 uppercase mb-0.5">Supervisor</p>
+                        <p class="text-[15px] font-semibold text-gray-900 dark:text-white" dir="auto">${p.supervisor}</p>
+                      </div>
+                   </div>
+                   
+                   <div class="flex items-start gap-3">
+                      <div class="mt-0.5 w-7 h-7 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center shrink-0 shadow-sm text-purple-600 dark:text-purple-400">
+                        <i class="fa-solid fa-users text-xs"></i>
+                      </div>
+                      <div class="w-full">
+                        <p class="text-[10px] font-bold tracking-wider text-purple-500 dark:text-purple-400 uppercase mb-1">Researchers</p>
+                        <ul class="text-[14px] leading-relaxed font-medium text-gray-700 dark:text-gray-200 list-none pl-0 space-y-1" dir="auto">
+                           ${studentList.map(s => `<li class="flex items-center gap-2"><i class="fa-solid fa-user text-[10px] text-purple-400"></i> <span>${s}</span></li>`).join('')}
+                        </ul>
+                      </div>
+                   </div>
+                </div>
+
+                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 font-medium">
+                   <span class="uppercase tracking-wider text-[10px] font-bold">Published Year</span>
+                   <span class="px-2.5 py-1 rounded-md bg-white dark:bg-gray-800 shadow-sm font-bold text-gray-800 dark:text-gray-200">${p.year}</span>
+                </div>
+              </div>
+              
+              <button onclick="openDetailModal('${p.id}')" class="w-full py-2.5 rounded-xl bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 transition font-semibold text-sm shadow-sm">
+                View Details
+              </button>
+            </div>
+          `;
+        } else {
+          // Render Book
+          html += `
+            <div class="glass rounded-2xl p-5 flex flex-col hover:-translate-y-1 transition duration-300 shadow-sm fade-in h-full">
+              <div class="flex justify-between items-start mb-3">
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide bg-emerald-100 text-emerald-900 dark:bg-emerald-900/50 dark:text-emerald-100 uppercase">${p.category}</span>
+                <button onclick="toggleFav('${p.id}', event)" class="text-xl ${isFav ? 'text-red-500' : 'text-gray-300 dark:text-gray-600 hover:text-red-400'} transition">
+                  <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
+                </button>
+              </div>
+              
+              <h3 class="font-bold text-lg leading-snug mb-2 line-clamp-2 text-gray-900 dark:text-white" dir="auto">${p.topic}</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-3 flex-1" dir="auto">${p.abstract || 'No abstract/description available.'}</p>
+              
+              <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/60 dark:to-gray-900/60 rounded-xl p-4 mb-4 border border-gray-200/60 dark:border-gray-700/60 text-left shadow-inner">
+                <div class="flex items-start gap-3">
+                  <div class="mt-0.5 w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 shadow-sm text-emerald-600 dark:text-emerald-400">
+                    <i class="fa-solid fa-feather-pointed text-xs"></i>
+                  </div>
+                  <div>
+                    <p class="text-[10px] font-bold tracking-wider text-emerald-600 dark:text-emerald-400 uppercase mb-0.5">Author(s)</p>
+                    <p class="text-[15px] font-semibold text-gray-900 dark:text-white" dir="auto">${p.authors}</p>
+                  </div>
+                </div>
+
+                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 font-medium">
+                   <span class="uppercase tracking-wider text-[10px] font-bold">Publication Year</span>
+                   <span class="px-2.5 py-1 rounded-md bg-white dark:bg-gray-800 shadow-sm font-bold text-gray-800 dark:text-gray-200">${p.year}</span>
+                </div>
+              </div>
+              
+              <button onclick="openDetailModal('${p.id}')" class="w-full py-2.5 rounded-xl bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 transition font-semibold text-sm shadow-sm">
+                View Details
+              </button>
+            </div>
+          `;
+        }
+      });
+      grid.innerHTML = html;
+    }
+
+    function toggleSort() {
+      SORT_NEWEST = !SORT_NEWEST;
+      document.getElementById('sortLabel').innerText = SORT_NEWEST ? 'Newest First' : 'Oldest First';
+      applyFilters();
+    }
+
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('yearFilter').value = 'All';
+      document.getElementById('personFilter').value = 'All';
+      const allCatBtn = document.querySelector('[data-cat="All"]');
+      if (allCatBtn) allCatBtn.click();
+    }
+
+    // Modal Item View
+    function openDetailModal(id) {
+      const allItems = [...ALL_RESEARCHES, ...ALL_BOOKS];
+      const p = allItems.find(x => x.id === id);
+      if (!p) return;
+
+      let actionHtml = '';
+      if (!p.fileId) {
+        actionHtml = `<div class="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-xl text-sm font-medium w-full text-center"><i class="fa-solid fa-triangle-exclamation"></i> File not available in archive</div>`;
+      } else {
+        if (PDF_ENABLED) {
+          actionHtml += `<button onclick="showInlinePdf('${p.fileId}', '${p.id}')" class="flex-1 text-center py-3 rounded-xl bg-uni-600 text-white font-medium hover:bg-uni-700 transition shadow-md flex items-center justify-center"><i class="fa-solid fa-file-pdf mr-2"></i> View PDF</button>`;
+        }
+        actionHtml += `<button onclick="openRequestModal('${p.id}')" class="flex-1 py-3 rounded-xl bg-gray-800 dark:bg-gray-700 text-white font-medium hover:bg-gray-900 dark:hover:bg-gray-600 transition shadow-md flex items-center justify-center"><i class="fa-solid fa-envelope mr-2"></i> Request Download</button>`;
+      }
+
+      let metaSection = '';
+      if (p.type === 'research') {
+        const studentList = (p.students || '').split(',').map(s => s.trim()).filter(s => s !== '');
+        metaSection = `
+          <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/60 dark:to-gray-900/60 border border-gray-200/60 dark:border-gray-700/60 p-6 rounded-2xl mb-6 shadow-inner flex flex-col gap-4">
+             <div class="flex items-start gap-4">
+                <div class="mt-1 w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center shrink-0 text-blue-600 dark:text-blue-400">
+                  <i class="fa-solid fa-chalkboard-user text-lg"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold tracking-wider text-blue-500 uppercase mb-1">Supervisor</p>
+                  <p class="font-bold text-gray-900 dark:text-white text-base" dir="auto">${p.supervisor}</p>
+                </div>
+             </div>
+             
+             <div class="flex items-start gap-4">
+                <div class="mt-1 w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center shrink-0 text-purple-600 dark:text-purple-400">
+                  <i class="fa-solid fa-users text-lg"></i>
+                </div>
+                <div class="w-full">
+                  <p class="text-xs font-bold tracking-wider text-purple-500 uppercase mb-1">Researchers</p>
+                  <ul class="font-semibold text-gray-800 dark:text-gray-200 list-none p-0 space-y-1" dir="auto">
+                     ${studentList.map(s => `<li class="flex items-center gap-2"><i class="fa-solid fa-user text-xs text-purple-400"></i> <span>${s}</span></li>`).join('')}
+                  </ul>
+                </div>
+             </div>
+
+             <div class="pt-3 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Year</span>
+                <span class="px-3 py-1 rounded-lg bg-white dark:bg-gray-800 font-bold text-gray-800 dark:text-gray-200">${p.year}</span>
+             </div>
+          </div>
+        `;
+      } else {
+        metaSection = `
+          <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/60 dark:to-gray-900/60 border border-gray-200/60 dark:border-gray-700/60 p-6 rounded-2xl mb-6 shadow-inner flex flex-col gap-4">
+             <div class="flex items-start gap-4">
+                <div class="mt-1 w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 text-emerald-600 dark:text-emerald-400">
+                  <i class="fa-solid fa-feather-pointed text-lg"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold tracking-wider text-emerald-500 uppercase mb-1">Author(s)</p>
+                  <p class="font-bold text-gray-900 dark:text-white text-base" dir="auto">${p.authors}</p>
+                </div>
+             </div>
+
+             <div class="pt-3 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Publication Year</span>
+                <span class="px-3 py-1 rounded-lg bg-white dark:bg-gray-800 font-bold text-gray-800 dark:text-gray-200">${p.year}</span>
+             </div>
+          </div>
+        `;
+      }
+
+      document.getElementById('detailContent').innerHTML = `
+        <div class="mb-6">
+          <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide bg-uni-100 text-uni-900 dark:bg-uni-900/50 dark:text-uni-100 uppercase mb-4 inline-block">${p.category}</span>
+          <h2 class="text-2xl font-bold leading-tight mb-4 text-gray-900 dark:text-white" dir="auto">${p.topic}</h2>
+          ${metaSection}
+        </div>
+        
+        <div class="mb-8">
+          <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Abstract / Summary</h4>
+          <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700">
+             <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap" dir="auto">${p.abstract || 'No abstract provided.'}</p>
+          </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-3 w-full">
+          ${actionHtml}
+        </div>
+      `;
+      document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function showInlinePdf(fileId, itemId) {
+      const container = document.getElementById('detailContent');
+      container.innerHTML = `
+        <div class="w-full h-[65vh] rounded-xl overflow-hidden relative bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-inner">
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 z-0">
+             <i class="fa-solid fa-spinner fa-spin text-4xl mb-3"></i>
+             <p class="font-medium text-sm">Loading PDF...</p>
+          </div>
+          <iframe src="https://drive.google.com/file/d/${fileId}/preview" class="w-full h-full border-0 relative z-10 rounded-xl" allow="autoplay"></iframe>
+        </div>
+        <div class="mt-5 flex justify-center w-full">
+           <button onclick="openDetailModal('${itemId}')" class="px-6 py-2.5 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-xl font-medium transition flex items-center gap-2 shadow-sm">
+             <i class="fa-solid fa-arrow-left"></i> Back to Details
+           </button>
+        </div>
+      `;
+    }
+
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    
+    // Download Requests
+    function openRequestModal(id) {
+      const allItems = [...ALL_RESEARCHES, ...ALL_BOOKS];
+      const p = allItems.find(x => x.id === id);
+      if (!p) return;
+      activeRequestFileId = p.fileId;
+      activeRequestTitle = p.topic;
+      closeModal('detailModal');
+      document.getElementById('requestModal').classList.remove('hidden');
+    }
+
+    function sendDownloadRequest(e) {
+      const email = document.getElementById('requestEmail').value;
+      const fullName = document.getElementById('reqFullName').value;
+      const stage = document.getElementById('reqStage').value;
+      const reason = document.getElementById('reqReason').value;
+
+      if (!fullName || !stage || !reason || !email.includes('@')) {
+        return showToast("Please fill all fields and enter a valid email.", "error");
+      }
+      
+      const btn = e ? e.target : document.querySelector('#requestModal button:last-child');
+      const originalText = btn.innerText;
+      btn.innerText = "Sending..."; 
+      btn.disabled = true;
+
+      apiPost({
+        action: 'submitRequest',
+        fileId: activeRequestFileId,
+        title: activeRequestTitle,
+        email: email,
+        fullName: fullName,
+        stage: stage,
+        reason: reason
+      })
+      .then(res => {
+        if (res.status === "Success") {
+          showToast("Request submitted to Admin!", "success");
+          closeModal('requestModal');
+          document.getElementById('requestEmail').value = '';
+        } else {
+          showToast(res.status, "error");
+        }
+      })
+      .catch(err => showToast("Error: " + err.message, "error"))
+      .finally(() => {
+        btn.innerText = originalText;
+        btn.disabled = false;
+      });
+    }
+
+    // Favourites
+    function toggleFav(id, e) {
+      e.stopPropagation();
+      const idx = FAVOURITES.indexOf(id);
+      if (idx > -1) FAVOURITES.splice(idx, 1);
+      else FAVOURITES.push(id);
+      
+      localStorage.setItem('englishLibFavs', JSON.stringify(FAVOURITES));
+      updateFavCount();
+      if (IS_FAV_VIEW) applyFilters(); 
+      else renderGrid();
+    }
+
+    function updateFavCount() {
+      document.getElementById('favCount').innerText = FAVOURITES.length;
+    }
+
+    function toggleFavView() {
+      IS_FAV_VIEW = !IS_FAV_VIEW;
+      document.getElementById('favToolbar').classList.toggle('hidden', !IS_FAV_VIEW);
+      applyFilters();
+    }
+
+    function downloadFavouritesPDF() {
+      if (FAVOURITES.length === 0) return showToast("No favourites to export", "error");
+      
+      showToast("Generating PDF (Please wait)...", "info");
+      const allItems = [...ALL_RESEARCHES, ...ALL_BOOKS];
+      const favItems = allItems.filter(p => FAVOURITES.includes(p.id));
+      
+      let html = `
+        <div style="padding: 30px; font-family: sans-serif; color: #1f2937;">
+          <h2 style="text-align: center; color: #1e3a8a; border-bottom: 2px solid #2563eb; padding-bottom: 15px; margin-bottom: 10px;">My Favourite Library Items</h2>
+          <p style="text-align: center; color: #6b7280; font-size: 13px; margin-bottom: 40px;">Export Date: ${new Date().toLocaleDateString()}</p>
+      `;
+
+      favItems.forEach((p, idx) => {
+        html += `
+          <div style="margin-bottom: 25px; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background-color: #f9fafb;">
+            <h3 style="margin-top: 0; margin-bottom: 15px; color: #111827; font-size: 18px;" dir="auto">${idx + 1}. ${p.topic}</h3>
+            <p style="font-size: 14px; color: #374151;"><strong>Category:</strong> ${p.category} | <strong>Year:</strong> ${p.year}</p>
+            <p style="font-size: 14px; color: #374151;"><strong>${p.type === 'research' ? 'Supervisor:' : 'Author(s):'}</strong> ${p.type === 'research' ? p.supervisor : p.authors}</p>
+          </div>
+        `;
+      });
+      
+      html += `</div>`;
+
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+
+      const opt = {
+        margin:       10,
+        filename:     'My_Favourites_Library.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(wrapper).save().then(() => {
+         showToast("PDF Downloaded successfully!", "success");
+      });
+    }
+
+    // Admin Panel
+    function openAdminLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
+    
+    function doAdminLogin() {
+      const pwd = document.getElementById('adminPwd').value;
+      const loginBtn = document.getElementById('loginBtn');
+      if (loginBtn) {
+        loginBtn.innerText = "Checking...";
+        loginBtn.disabled = true;
+      }
+      
+      apiGet('getAdminData', { password: pwd })
+        .then(data => {
+          ADMIN_PWD = pwd;
+          closeModal('loginModal');
+          document.getElementById('mainApp').classList.add('hidden');
+          document.getElementById('adminDashboard').classList.remove('hidden');
+          document.getElementById('pdfToggle').checked = PDF_ENABLED;
+          renderAdminData(data);
+        })
+        .catch(() => showToast("Incorrect Password or Error", "error"))
+        .finally(() => {
+          if (loginBtn) {
+            loginBtn.innerText = "Login";
+            loginBtn.disabled = false;
+          }
+        });
+    }
+
+    function renderAdminData(data) {
+      document.getElementById('adminStats').innerText = `Total Page Views: ${data.views} | Pending Requests: ${data.requests.length}`;
+      
+      const list = document.getElementById('requestList');
+      if (!data.requests || data.requests.length === 0) {
+        list.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">No pending requests found.</p>`;
+        return;
+      }
+
+      PENDING_REQUESTS = data.requests;
+
+      list.innerHTML = data.requests.map(r => `
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm p-4 rounded-xl flex flex-col md:flex-row justify-between items-center gap-4">
+          <div class="flex-1 w-full text-left">
+            <p class="font-bold text-sm text-gray-900 dark:text-white mb-2 leading-tight">${r.title}</p>
+            <div class="text-xs text-gray-600 dark:text-gray-400 mb-2 grid grid-cols-1 md:grid-cols-2 gap-1">
+               <p><span class="font-semibold text-gray-800 dark:text-gray-200">${r.fullName}</span> (${r.stage})</p>
+               <p><i class="fa-solid fa-envelope mr-1"></i> ${r.email}</p>
+               <p><i class="fa-regular fa-calendar mr-1"></i> ${new Date(r.date).toLocaleDateString()}</p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded-lg border border-gray-100 dark:border-gray-700">
+               <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Reason</p>
+               <p class="text-sm text-gray-700 dark:text-gray-300 italic">"${r.reason}"</p>
+            </div>
+          </div>
+          <div class="flex flex-row md:flex-col gap-2 w-full md:w-32 shrink-0">
+            <button onclick="processReq(${r.row}, 'accept')" class="w-full px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-bold shadow-sm transition"><i class="fa-solid fa-check mr-1"></i> Accept</button>
+            <button onclick="processReq(${r.row}, 'reject')" class="w-full px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 rounded-lg text-sm font-bold transition"><i class="fa-solid fa-xmark mr-1"></i> Reject</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function refreshRequests() {
+      const btn = document.getElementById('refreshReqsBtn');
+      const icon = document.getElementById('refreshIcon');
+      if (icon) icon.classList.add('fa-spin');
+      if (btn) btn.disabled = true;
+      
+      apiGet('getAdminData', { password: ADMIN_PWD })
+        .then(data => {
+          renderAdminData(data);
+          showToast("Requests updated", "success");
+        })
+        .catch(() => showToast("Error refreshing data", "error"))
+        .finally(() => {
+          if (icon) icon.classList.remove('fa-spin');
+          if (btn) btn.disabled = false;
+        });
+    }
+
+    function processReq(row, action) {
+      const req = PENDING_REQUESTS.find(r => r.row === row);
+      if (!req) return showToast("Request mapping error.", "error");
+
+      showToast("Processing request...", "info");
+      
+      apiPost({
+        action: 'handleRequest',
+        rowId: req.row,
+        email: req.email,
+        fileId: req.fileId,
+        title: req.title,
+        actionType: action,
+        password: ADMIN_PWD
+      })
+      .then(res => {
+        if(res.status === "Success") {
+          showToast(`Request ${action}ed!`, "success");
+          refreshRequests();
+        } else {
+          showToast(res.status, "error");
+        }
+      })
+      .catch(err => showToast("Error: " + err.message, "error"));
+    }
+
+    function toggleGlobalPdf() {
+      const isChecked = document.getElementById('pdfToggle').checked;
+      PDF_ENABLED = isChecked;
+      
+      apiPost({
+        action: 'togglePdfSetting',
+        status: isChecked,
+        password: ADMIN_PWD
+      })
+      .then(() => showToast("Settings updated", "success"))
+      .catch(() => showToast("Error updating settings", "error"));
+    }
+
+    function toggleAdminFormType() {
+      const type = document.getElementById('newItemType').value;
+      const resFields = document.getElementById('researchFields');
+      const bookFields = document.getElementById('bookFields');
+      if (type === 'book') {
+        resFields.classList.add('hidden');
+        bookFields.classList.remove('hidden');
+      } else {
+        resFields.classList.remove('hidden');
+        bookFields.classList.add('hidden');
+      }
+    }
+
+    function addRecord() {
+      const itemType = document.getElementById('newItemType').value;
+      const data = {
+        year: document.getElementById('newYear').value,
+        category: document.getElementById('newCat').value,
+        supervisor: document.getElementById('newSup').value,
+        student1: document.getElementById('newS1').value,
+        student2: document.getElementById('newS2').value,
+        student3: document.getElementById('newS3').value,
+        authors: document.getElementById('newAuthors').value,
+        topic: document.getElementById('newTopic').value,
+        abstract: document.getElementById('newAbstract').value,
+        fileId: document.getElementById('newFile').value
+      };
+      
+      if(!data.topic || !data.year) return showToast("Title/Topic and Year are required!", "error");
+      
+      const btn = document.getElementById('addRecordBtn');
+      if (btn) {
+        btn.innerText = "Adding...";
+        btn.disabled = true;
+      }
+
+      apiPost({
+        action: 'addNewItem',
+        itemType: itemType,
+        itemData: data,
+        password: ADMIN_PWD
+      })
+      .then(() => {
+        showToast("Added successfully!", "success");
+        ['newYear','newCat','newSup','newS1','newS2','newS3','newAuthors','newTopic','newAbstract','newFile'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+      })
+      .catch(err => showToast("Error adding record: " + err.message, "error"))
+      .finally(() => {
+        if (btn) {
+          btn.innerText = "Add Record";
+          btn.disabled = false;
+        }
+      });
+    }
+
+    function logoutAdmin() {
+      ADMIN_PWD = '';
+      document.getElementById('adminDashboard').classList.add('hidden');
+      document.getElementById('mainApp').classList.remove('hidden');
+      
+      apiGet('getAppData')
+        .then(initApp)
+        .catch(() => showToast("Error reloading data", "error"));
+    }
+
+    function showToast(msg, type="info") {
+      const colors = { info: "bg-gray-800 text-white", success: "bg-green-600 text-white", error: "bg-red-600 text-white" };
+      const toast = document.createElement('div');
+      toast.className = `toast px-4 py-3 rounded-xl shadow-xl font-medium text-sm fade-in ${colors[type]}`;
+      toast.innerText = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = 0; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+  </script>
+</body>
+</html>
