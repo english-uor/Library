@@ -33,14 +33,13 @@
   </script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <link rel="preconnect" href="https://script.google.com"><link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
   <style>
     body { font-family: 'Inter', sans-serif; }
     .bg-library {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+      background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=50');
       background-size: cover; background-position: center;
       filter: blur(12px) brightness(0.7); z-index: -1;
     }
@@ -350,7 +349,7 @@
 
   <script>
     // ================= API ENDPOINT CONFIG =================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzi4eEteSqEfiFEipdlaRj2xOm9xROw12wbedEocfzcj8biSlHEYftAuRJRgmUnYiDXGg/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzG6-JTkEVWvs8HWWJrOQr0pc7DX-rYmslqqUvparPLDgZ9pe1vI6Z6XNP0x0a9_a9qaQ/exec';
 
     // State Management
     let ALL_RESEARCHES = [];
@@ -450,7 +449,13 @@
     }
 
     // ================= LOADING HELPERS =================
-    const CACHE_KEY = 'englishLibDataCache';
+    const CACHE_KEY = 'englishLibDataCache_v2';
+    const FRESH_MS = 2 * 60 * 1000;   // skip the network if saved data is younger than this
+    const PAGE_SIZE = 24;             // cards drawn per batch
+    const SNIPPET_LEN = 300;          // must match SNIPPET_LEN in Code.gs
+    let RENDER_COUNT = 0;
+    const ABSTRACT_CACHE = {};
+    try { localStorage.removeItem('englishLibDataCache'); } catch (e) {}
     function showLoader(title, text, isError) {
       document.getElementById('ldTitle').innerText = title;
       document.getElementById('ldText').innerText = text;
@@ -462,11 +467,15 @@
     function hideLoader() { document.getElementById('dataLoader').classList.remove('show'); }
 
     function loadLibrary() {
-      let hadCache = false;
+      let hadCache = false, fresh = false;
       try {
         const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
-        if (cached && cached.data) { initApp(cached.data); hadCache = true; }
+        if (cached && cached.data) {
+          initApp(cached.data); hadCache = true;
+          fresh = (Date.now() - (cached.t || 0)) < FRESH_MS;
+        }
       } catch (e) {}
+      if (hadCache && fresh) { hideLoader(); return; }
 
       const stats = document.getElementById('liveStats');
       if (hadCache) {
@@ -592,6 +601,7 @@
         return SORT_NEWEST ? valB - valA : valA - valB;
       });
 
+      RENDER_COUNT = 0;
       const totalCount = activeItems.length;
       const typeLabel = CURRENT_SECTION === 'researches' ? 'papers' : 'books';
       document.getElementById('liveStats').innerText = `Showing ${FILTERED_ITEMS.length} of ${totalCount} ${typeLabel}`;
@@ -599,12 +609,13 @@
       renderGrid();
     }
 
-    function renderGrid() {
+    function renderGrid(append) {
       const grid = document.getElementById('resultsGrid');
       const empty = document.getElementById('emptyState');
       
-      grid.innerHTML = '';
+      if (!append) { grid.innerHTML = ''; RENDER_COUNT = 0; }
       if (FILTERED_ITEMS.length === 0) {
+        updateLoadMore();
         grid.classList.add('hidden');
         empty.classList.remove('hidden');
         return;
@@ -614,7 +625,8 @@
       empty.classList.add('hidden');
 
       let html = '';
-      FILTERED_ITEMS.forEach(p => {
+      const batchEnd = Math.min(RENDER_COUNT + PAGE_SIZE, FILTERED_ITEMS.length);
+      FILTERED_ITEMS.slice(RENDER_COUNT, batchEnd).forEach(p => {
         const isFav = FAVOURITES.includes(p.id);
         
         if (p.type === 'research') {
@@ -705,7 +717,35 @@
           `;
         }
       });
-      grid.innerHTML = html;
+      if (append) grid.insertAdjacentHTML('beforeend', html);
+      else grid.innerHTML = html;
+      RENDER_COUNT = batchEnd;
+      updateLoadMore();
+    }
+
+    // "Load more" button + automatic loading when the user scrolls near the end
+    let _moreObserver = null;
+    function updateLoadMore() {
+      let wrap = document.getElementById('loadMoreWrap');
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.id = 'loadMoreWrap';
+        wrap.className = 'flex justify-center py-8';
+        wrap.innerHTML = '<button id="loadMoreBtn" class="px-6 py-3 rounded-xl glass font-semibold text-sm text-gray-800 dark:text-white shadow-sm hover:-translate-y-0.5 transition"></button>';
+        document.getElementById('resultsGrid').after(wrap);
+        wrap.querySelector('button').addEventListener('click', () => renderGrid(true));
+        if ('IntersectionObserver' in window) {
+          _moreObserver = new IntersectionObserver(es => {
+            if (es.some(e => e.isIntersecting) && RENDER_COUNT < FILTERED_ITEMS.length) renderGrid(true);
+          }, { rootMargin: '600px' });
+          _moreObserver.observe(wrap);
+        }
+      }
+      const left = FILTERED_ITEMS.length - RENDER_COUNT;
+      wrap.style.display = left > 0 ? 'flex' : 'none';
+      wrap.querySelector('button').innerText = `Load more (${left} left)`;
+      // re-check after layout so the observer fires again if the sentinel is still visible
+      if (_moreObserver && left > 0) { _moreObserver.unobserve(wrap); _moreObserver.observe(wrap); }
     }
 
     function toggleSort() {
@@ -802,7 +842,7 @@
         <div class="mb-8">
           <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Abstract / Summary</h4>
           <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700">
-             <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap" dir="auto">${p.abstract || 'No abstract provided.'}</p>
+             <p id="detailAbstract" class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap" dir="auto">${ABSTRACT_CACHE[p.id] || p.abstract || 'No abstract provided.'}</p>
           </div>
         </div>
         
@@ -811,6 +851,22 @@
         </div>
       `;
       document.getElementById('detailModal').classList.remove('hidden');
+      loadFullAbstract(p);
+    }
+
+    // The list only carries a short snippet; fetch the full abstract when an item is opened
+    function loadFullAbstract(p) {
+      if (ABSTRACT_CACHE[p.id] || !p.abstract || p.abstract.length < SNIPPET_LEN) return;
+      const el = document.getElementById('detailAbstract');
+      if (el) el.style.opacity = '0.6';
+      apiGet('getAbstract', { type: p.type, id: p.id })
+        .then(r => {
+          if (r && r.abstract) ABSTRACT_CACHE[p.id] = r.abstract;
+          const now = document.getElementById('detailAbstract');
+          if (now && ABSTRACT_CACHE[p.id]) now.textContent = ABSTRACT_CACHE[p.id];
+          if (now) now.style.opacity = '';
+        })
+        .catch(() => { const now = document.getElementById('detailAbstract'); if (now) now.style.opacity = ''; });
     }
 
     function showInlinePdf(fileId, itemId) {
@@ -907,6 +963,20 @@
       applyFilters();
     }
 
+    let _pdfLibPromise = null;
+    function loadPdfLib() {
+      if (window.html2pdf) return Promise.resolve();
+      if (_pdfLibPromise) return _pdfLibPromise;
+      _pdfLibPromise = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+        s.onload = resolve;
+        s.onerror = () => { _pdfLibPromise = null; reject(new Error('Could not load PDF tool')); };
+        document.head.appendChild(s);
+      });
+      return _pdfLibPromise;
+    }
+
     function downloadFavouritesPDF() {
       if (FAVOURITES.length === 0) return showToast("No favourites to export", "error");
       
@@ -943,9 +1013,10 @@
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(wrapper).save().then(() => {
-         showToast("PDF Downloaded successfully!", "success");
-      });
+      loadPdfLib()
+        .then(() => html2pdf().set(opt).from(wrapper).save())
+        .then(() => showToast("PDF Downloaded successfully!", "success"))
+        .catch(err => showToast(err.message || "PDF export failed", "error"));
     }
 
     // Admin Panel
