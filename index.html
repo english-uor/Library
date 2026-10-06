@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+  <link rel="preconnect" href="https://script.google.com"><link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
   <style>
     body { font-family: 'Inter', sans-serif; }
     .bg-library {
@@ -81,9 +82,32 @@
     .visualizer-bar:nth-child(2) { animation-delay: 0.15s; }
     .visualizer-bar:nth-child(3) { animation-delay: 0.3s; }
     .visualizer-bar:nth-child(4) { animation-delay: 0.45s; }
+    /* ===== Loading window ===== */
+    #dataLoader{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(17,24,39,.55);backdrop-filter:blur(6px)}
+    #dataLoader.show{display:flex}
+    #dataLoader .ld-card{background:#fff;color:#111827;width:100%;max-width:22rem;border-radius:1.25rem;padding:1.75rem 1.5rem;text-align:center;box-shadow:0 25px 50px -12px rgba(0,0,0,.45)}
+    .dark #dataLoader .ld-card{background:#1f2937;color:#f9fafb}
+    #dataLoader .ld-ring{width:56px;height:56px;margin:0 auto 1rem;border-radius:50%;border:5px solid rgba(99,102,241,.2);border-top-color:#6366f1;animation:ldspin .9s linear infinite}
+    #dataLoader .ld-bar{height:6px;border-radius:99px;background:rgba(99,102,241,.15);overflow:hidden;margin-top:1.1rem}
+    #dataLoader .ld-bar span{display:block;height:100%;width:40%;border-radius:99px;background:linear-gradient(90deg,#6366f1,#a855f7);animation:ldslide 1.2s ease-in-out infinite}
+    #dataLoader .ld-retry{margin-top:1rem;padding:.6rem 1.4rem;border-radius:.75rem;background:#4f46e5;color:#fff;font-weight:700;font-size:.875rem;display:none}
+    .skel{height:190px;border-radius:1rem;background:linear-gradient(90deg,rgba(156,163,175,.18) 25%,rgba(156,163,175,.32) 50%,rgba(156,163,175,.18) 75%);background-size:200% 100%;animation:skel 1.3s infinite}
+    @keyframes ldspin{to{transform:rotate(360deg)}}
+    @keyframes ldslide{0%{margin-left:-40%}100%{margin-left:100%}}
+    @keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
   </style>
 </head>
 <body class="text-gray-900 dark:text-gray-100 min-h-screen overflow-hidden">
+  <div id="dataLoader" role="status" aria-live="polite">
+    <div class="ld-card">
+      <div class="ld-ring"></div>
+      <h3 id="ldTitle" class="text-lg font-bold mb-1">Please wait…</h3>
+      <p id="ldText" class="text-sm text-gray-500 dark:text-gray-400">Books and researches will load soon.</p>
+      <div class="ld-bar"><span></span></div>
+      <button id="ldRetry" class="ld-retry" onclick="loadLibrary()">Try again</button>
+    </div>
+  </div>
+
   
   <div id="welcomeScreen" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/90 backdrop-blur-lg transition-all duration-1000 cursor-pointer p-4" onclick="dismissWelcome()">
     <div class="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-purple-600/30 to-rose-500/30 animate-pulse"></div>
@@ -326,7 +350,7 @@
 
   <script>
     // ================= API ENDPOINT CONFIG =================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwPvDCFN-gY7TMNcX8AgGfdznpjNlkYH4fSnXc2MiSU3QH2w5AAkepZjZi2Pt_uweQKqQ/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzi4eEteSqEfiFEipdlaRj2xOm9xROw12wbedEocfzcj8biSlHEYftAuRJRgmUnYiDXGg/exec';
 
     // State Management
     let ALL_RESEARCHES = [];
@@ -390,11 +414,7 @@
       }, 3000);
 
       updateFavCount();
-      showToast("Loading library database...", "info");
-      
-      apiGet('getAppData')
-        .then(initApp)
-        .catch(err => showToast("Error loading data: " + err.message, "error"));
+      loadLibrary();
       
       let timeout;
       document.getElementById('searchInput').addEventListener('input', () => {
@@ -427,6 +447,46 @@
         statusText.innerText = "Audio Paused";
         visualizer.style.display = "none";
       }
+    }
+
+    // ================= LOADING HELPERS =================
+    const CACHE_KEY = 'englishLibDataCache';
+    function showLoader(title, text, isError) {
+      document.getElementById('ldTitle').innerText = title;
+      document.getElementById('ldText').innerText = text;
+      document.getElementById('ldRetry').style.display = isError ? 'inline-block' : 'none';
+      document.querySelector('#dataLoader .ld-ring').style.display = isError ? 'none' : 'block';
+      document.querySelector('#dataLoader .ld-bar').style.display = isError ? 'none' : 'block';
+      document.getElementById('dataLoader').classList.add('show');
+    }
+    function hideLoader() { document.getElementById('dataLoader').classList.remove('show'); }
+
+    function loadLibrary() {
+      let hadCache = false;
+      try {
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+        if (cached && cached.data) { initApp(cached.data); hadCache = true; }
+      } catch (e) {}
+
+      const stats = document.getElementById('liveStats');
+      if (hadCache) {
+        hideLoader();
+        if (stats) stats.innerText = 'Updating…';
+      } else {
+        document.getElementById('resultsGrid').innerHTML = '<div class="skel"></div><div class="skel hidden md:block"></div><div class="skel hidden lg:block"></div>';
+        showLoader('Loading the library…', 'Books and researches will load soon. Please wait a moment.');
+      }
+
+      apiGet('getAppData')
+        .then(data => {
+          try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data })); } catch (e) {}
+          initApp(data);
+          hideLoader();
+        })
+        .catch(err => {
+          if (hadCache) { hideLoader(); showToast('Could not refresh. Showing saved data.', 'error'); }
+          else showLoader('Could not load data', err.message || 'Check your internet connection.', true);
+        });
     }
 
     function initApp(response) {
@@ -899,8 +959,10 @@
         loginBtn.disabled = true;
       }
       
+      showLoader('Signing in…', 'Checking your password and loading the dashboard. Please wait.');
       apiGet('getAdminData', { password: pwd })
         .then(data => {
+          hideLoader();
           ADMIN_PWD = pwd;
           closeModal('loginModal');
           document.getElementById('mainApp').classList.add('hidden');
@@ -908,7 +970,7 @@
           document.getElementById('pdfToggle').checked = PDF_ENABLED;
           renderAdminData(data);
         })
-        .catch(() => showToast("Incorrect Password or Error", "error"))
+        .catch(() => { hideLoader(); showToast("Incorrect Password or Error", "error"); })
         .finally(() => {
           if (loginBtn) {
             loginBtn.innerText = "Login";
@@ -1071,7 +1133,7 @@
       document.getElementById('mainApp').classList.remove('hidden');
       
       apiGet('getAppData')
-        .then(initApp)
+        .then(d => { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data: d })); } catch (e) {} initApp(d); })
         .catch(() => showToast("Error reloading data", "error"));
     }
 
